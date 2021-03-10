@@ -22,7 +22,12 @@ class DetailBookViewController: UIViewController {
 		label.font = label.font.withSize(20)
 		return label
 	}()
-	private var subtitleLabel 	= UILabel()
+	private var subtitleLabel: UILabel = {
+		let label = UILabel()
+		label.textColor = .lightGray
+		label.font = label.font.withSize(15)
+		return label
+	}()
 	private var publisherLabel 	= UILabel()
 	private var authorsLabel 	= UILabel()
 	private var languageLabel 	= UILabel()
@@ -41,7 +46,14 @@ class DetailBookViewController: UIViewController {
 		button.setTitleColor(.black, for: .normal)
 		return button
 	}()
-	private let stackView: UIStackView = {
+	private let stackView1: UIStackView = {
+		let stackView = UIStackView(frame: .zero)
+		stackView.axis = .vertical
+		stackView.spacing = 10
+		stackView.alignment = .center
+		return stackView
+	}()
+	private let stackView2: UIStackView = {
 		let stackView = UIStackView(frame: .zero)
 		stackView.axis = .vertical
 		stackView.spacing = 10
@@ -60,16 +72,16 @@ class DetailBookViewController: UIViewController {
 		guard let title = self.bookDetailList.title else { return }
 		
 		self.titleLabel.text = title
-		self.subtitleLabel.text = "subtitle : " + String(describing: self.bookDetailList.subtitle)
-		self.publisherLabel.text = "publisher : " + String(describing: self.bookDetailList.publisher)
-		self.authorsLabel.text = "authors : " + String(describing: self.bookDetailList.authors)
-		self.languageLabel.text = "language : " + String(describing: self.bookDetailList.language)
-		self.pagesLabel.text = "pages : " + String(describing: self.bookDetailList.pages)
-		self.isbn13Label.text = "isbn13 : " + String(describing: self.bookDetailList.isbn13)
-		self.isbn10Label.text = "isbn10 : " + String(describing: self.bookDetailList.isbn10)
-		self.priceLabel.text = "price : " + String(describing: self.bookDetailList.price)
-		self.yearLabel.text = "year : " + String(describing: self.bookDetailList.year)
-		self.descLabel.text = "desc : " + String(describing: self.bookDetailList.desc)
+		self.subtitleLabel.text = self.bookDetailList.subtitle ?? ""
+		self.publisherLabel.text = "publisher : " + (self.bookDetailList.publisher ?? "")
+		self.authorsLabel.text = "authors : " + (self.bookDetailList.authors ?? "")
+		self.languageLabel.text = "language : " + (self.bookDetailList.language ?? "")
+		self.pagesLabel.text = "pages : " + (self.bookDetailList.pages ?? "")
+		self.isbn13Label.text = "isbn13 : " + (self.bookDetailList.isbn13 ?? "")
+		self.isbn10Label.text = "isbn10 : " + (self.bookDetailList.isbn10 ?? "")
+		self.priceLabel.text = "price : " + (self.bookDetailList.price ?? "")
+		self.yearLabel.text = "year : " + (self.bookDetailList.year ?? "")
+		self.descLabel.text = "desc : " + (self.bookDetailList.desc ?? "")
 		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
 	}
 	
@@ -111,8 +123,8 @@ extension DetailBookViewController {
 		view.addSubview(self.scrollView)
 		self.scrollView.addSubview(self.contentView)
 		self.contentView.addSubview(self.imageView)
-		self.contentView.addSubview(self.titleLabel)
-		self.contentView.addSubview(self.stackView)
+		self.contentView.addSubview(self.stackView1)
+		self.contentView.addSubview(self.stackView2)
 		self.contentView.addSubview(self.urlButton)
 		self.scrollView.translatesAutoresizingMaskIntoConstraints = false
 		self.contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -136,28 +148,31 @@ extension DetailBookViewController {
 		self.imageView.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
 		self.imageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
 		
-		self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
-		self.titleLabel.topAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
-		self.titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+		self.stackView1.addArrangedSubview(self.titleLabel)
+		self.stackView1.addArrangedSubview(self.subtitleLabel)
 		
-		self.stackView.addArrangedSubview(self.subtitleLabel)
-		self.stackView.addArrangedSubview(self.publisherLabel)
-		self.stackView.addArrangedSubview(self.authorsLabel)
-		self.stackView.addArrangedSubview(self.languageLabel)
-		self.stackView.addArrangedSubview(self.pagesLabel)
-		self.stackView.addArrangedSubview(self.isbn10Label)
-		self.stackView.addArrangedSubview(self.isbn13Label)
-		self.stackView.addArrangedSubview(self.priceLabel)
-		self.stackView.addArrangedSubview(self.yearLabel)
-		self.stackView.addArrangedSubview(self.descLabel)
+		self.stackView1.translatesAutoresizingMaskIntoConstraints = false
+		self.stackView1.topAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
+		self.stackView1.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+		self.stackView1.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
 		
-		self.stackView.translatesAutoresizingMaskIntoConstraints = false
-		self.stackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
-		self.stackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-		self.stackView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor).isActive = true
+		self.stackView2.addArrangedSubview(self.publisherLabel)
+		self.stackView2.addArrangedSubview(self.authorsLabel)
+		self.stackView2.addArrangedSubview(self.languageLabel)
+		self.stackView2.addArrangedSubview(self.pagesLabel)
+		self.stackView2.addArrangedSubview(self.isbn10Label)
+		self.stackView2.addArrangedSubview(self.isbn13Label)
+		self.stackView2.addArrangedSubview(self.priceLabel)
+		self.stackView2.addArrangedSubview(self.yearLabel)
+		self.stackView2.addArrangedSubview(self.descLabel)
+		
+		self.stackView2.translatesAutoresizingMaskIntoConstraints = false
+		self.stackView2.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+		self.stackView2.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
+		self.stackView2.topAnchor.constraint(equalTo: self.stackView1.bottomAnchor, constant: 10).isActive = true
 		
 		self.urlButton.translatesAutoresizingMaskIntoConstraints = false
-		self.urlButton.topAnchor.constraint(equalTo: self.stackView.bottomAnchor, constant: 10).isActive = true
+		self.urlButton.topAnchor.constraint(equalTo: self.stackView2.bottomAnchor, constant: 10).isActive = true
 		self.urlButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
 		self.urlButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 		self.urlButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
