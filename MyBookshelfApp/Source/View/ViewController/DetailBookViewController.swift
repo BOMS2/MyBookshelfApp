@@ -46,6 +46,12 @@ class DetailBookViewController: UIViewController {
 		button.setTitleColor(.black, for: .normal)
 		return button
 	}()
+	private let memoButton: UIButton = {
+		let button = UIButton()
+		button.setTitle("memo", for: .normal)
+		button.setTitleColor(.black, for: .normal)
+		return button
+	}()
 	private let stackView1: UIStackView = {
 		let stackView = UIStackView(frame: .zero)
 		stackView.axis = .vertical
@@ -95,7 +101,7 @@ class DetailBookViewController: UIViewController {
 		}
 	}
 	
-	@objc private func didButtonClick() {
+	@objc private func urlButtonClick() {
 		guard let url = self.bookDetailList.url else { return }
 		
 		if let url = URL(string: url) {
@@ -106,12 +112,17 @@ class DetailBookViewController: UIViewController {
 			}
 		}
 	}
+	
+	@objc private func memoButtonClick() {
+		self.navigationController?.pushViewController(MemoViewController(), animated: false)
+	}
 }
 
 extension DetailBookViewController {
 	private func setup() {
 		self.fetchBooksDetail()
-		self.urlButton.addTarget(self, action: #selector(self.didButtonClick), for: .touchUpInside)
+		self.urlButton.addTarget(self, action: #selector(self.urlButtonClick), for: .touchUpInside)
+		self.memoButton.addTarget(self, action: #selector(self.memoButtonClick), for: .touchUpInside)
 		self.titleLabel.numberOfLines = 0
 		self.subtitleLabel.numberOfLines = 0
 		self.descLabel.numberOfLines = 0
@@ -126,6 +137,7 @@ extension DetailBookViewController {
 		self.contentView.addSubview(self.stackView1)
 		self.contentView.addSubview(self.stackView2)
 		self.contentView.addSubview(self.urlButton)
+		self.contentView.addSubview(self.memoButton)
 		self.scrollView.translatesAutoresizingMaskIntoConstraints = false
 		self.contentView.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -177,5 +189,10 @@ extension DetailBookViewController {
 		self.urlButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 		self.urlButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
 		self.urlButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+		
+		self.memoButton.translatesAutoresizingMaskIntoConstraints = false
+		self.memoButton.topAnchor.constraint(equalTo: self.stackView2.bottomAnchor, constant: 10).isActive = true
+		self.memoButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
+		self.memoButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 	}
 }

@@ -19,6 +19,7 @@
 		293E9F3B25F72AAB008B101A /* BookDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293E9F3A25F72AAB008B101A /* BookDetail.swift */; };
 		293E9F8825F76955008B101A /* DetailBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293E9F8725F76955008B101A /* DetailBookViewController.swift */; };
 		293E9FAC25F8B9FE008B101A /* BookImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293E9FAB25F8B9FE008B101A /* BookImageView.swift */; };
+		293E9FB725F9282F008B101A /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293E9FB625F9282F008B101A /* MemoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		293E9F3A25F72AAB008B101A /* BookDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetail.swift; sourceTree = "<group>"; };
 		293E9F8725F76955008B101A /* DetailBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBookViewController.swift; sourceTree = "<group>"; };
 		293E9FAB25F8B9FE008B101A /* BookImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookImageView.swift; sourceTree = "<group>"; };
+		293E9FB625F9282F008B101A /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 			children = (
 				293E9EB725F703FE008B101A /* SearchViewController.swift */,
 				293E9F8725F76955008B101A /* DetailBookViewController.swift */,
+				293E9FB625F9282F008B101A /* MemoViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 			files = (
 				293E9F2525F70DF5008B101A /* BookListCell.swift in Sources */,
 				293E9F3025F72A77008B101A /* BookAPI.swift in Sources */,
+				293E9FB725F9282F008B101A /* MemoViewController.swift in Sources */,
 				293E9F3625F72AA0008B101A /* Book.swift in Sources */,
 				293E9EB825F703FE008B101A /* SearchViewController.swift in Sources */,
 				293E9EB425F703FE008B101A /* AppDelegate.swift in Sources */,
