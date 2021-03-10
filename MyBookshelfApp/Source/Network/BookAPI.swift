@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 enum BookError: Error {
 	case norequest
 	case nodata

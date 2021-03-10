@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class SearchViewController: UIViewController {
 
 	private var tableView = UITableView()
@@ -21,7 +20,6 @@ class SearchViewController: UIViewController {
 			}
 		}
 	}
-	
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -42,6 +40,7 @@ class SearchViewController: UIViewController {
 	private func setLayout() {
 		self.view.backgroundColor = .white
 		self.view.addSubview(self.searchBar)
+		self.view.addSubview(self.tableView)
 		self.searchBar.translatesAutoresizingMaskIntoConstraints = false
 		if #available(iOS 11.0, *) {
 			self.searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -50,9 +49,8 @@ class SearchViewController: UIViewController {
 		}
 		self.searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
 		self.searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-		self.searchBar.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+		self.searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
 		
-		self.view.addSubview(self.tableView)
 		self.tableView.translatesAutoresizingMaskIntoConstraints = false
 		self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
 		self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
@@ -68,7 +66,6 @@ class SearchViewController: UIViewController {
 	}
 }
 
-
 extension SearchViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.books = self.booklist[indexPath.row]
@@ -78,10 +75,9 @@ extension SearchViewController: UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return 200.0
+		return 200
 	}
 }
-
 
 extension SearchViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,7 +93,6 @@ extension SearchViewController: UITableViewDataSource {
 		return cell
 	}
 }
-
 
 extension SearchViewController: UISearchBarDelegate {
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
