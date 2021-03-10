@@ -11,6 +11,9 @@ class DetailBookViewController: UIViewController {
 	var isbn13: String? = ""
 	private var bookDetailList = BookDetail()
 	
+	private let scrollView = UIScrollView()
+	private let contentView = UIView()
+	
 	private var titleLabel 		= UILabel()
 	private var subtitleLabel 	= UILabel()
 	private var publisherLabel 	= UILabel()
@@ -57,7 +60,6 @@ class DetailBookViewController: UIViewController {
 		self.yearLabel.text = "year : " + String(describing: self.bookDetailList.year)
 		self.descLabel.text = "desc : " + String(describing: self.bookDetailList.desc)
 		self.urlLabel.text = "url : " + String(describing: self.bookDetailList.url)
-//		self.imageView.loadImage(from: url)
 		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
 	}
 	
@@ -74,11 +76,33 @@ class DetailBookViewController: UIViewController {
 	private func setLayout() {
 		self.view.backgroundColor = .white
 		
-		self.view.addSubview(self.imageView)
-		self.imageView.translatesAutoresizingMaskIntoConstraints = false
-		self.imageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 30.0).isActive = true
-		self.imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+		view.addSubview(self.scrollView)
+		self.scrollView.addSubview(self.contentView)
+		self.scrollView.translatesAutoresizingMaskIntoConstraints = false
+		self.contentView.translatesAutoresizingMaskIntoConstraints = false
 		
+		self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+		self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+		self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+		self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+		
+		self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+		self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor).isActive = true
+		self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor).isActive = true
+		self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+		self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor).isActive = true
+		
+		let contentViewHeightConstraint = self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor)
+		contentViewHeightConstraint.priority = .defaultLow
+		contentViewHeightConstraint.isActive = true
+		
+		
+		self.contentView.addSubview(self.imageView)
+		self.imageView.translatesAutoresizingMaskIntoConstraints = false
+		self.imageView.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+		self.imageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+		
+		self.contentView.addSubview(self.stackView)
 		self.stackView.addArrangedSubview(self.titleLabel)
 		self.stackView.addArrangedSubview(self.subtitleLabel)
 		self.stackView.addArrangedSubview(self.publisherLabel)
@@ -91,12 +115,11 @@ class DetailBookViewController: UIViewController {
 		self.stackView.addArrangedSubview(self.yearLabel)
 		self.stackView.addArrangedSubview(self.descLabel)
 		self.stackView.addArrangedSubview(self.urlLabel)
-		self.stackView.translatesAutoresizingMaskIntoConstraints = false
 		
-		self.view.addSubview(self.stackView)
-		self.stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-		self.stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-		self.stackView.topAnchor.constraint(equalTo: self.imageView.bottomAnchor, constant: 10.0).isActive = true
-		self.stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+		self.stackView.translatesAutoresizingMaskIntoConstraints = false
+		self.stackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+		self.stackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
+		self.stackView.topAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
+		self.stackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 	}
 }
