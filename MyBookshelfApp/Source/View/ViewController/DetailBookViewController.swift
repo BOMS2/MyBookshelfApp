@@ -25,8 +25,15 @@ class DetailBookViewController: UIViewController {
 	private var pagesLabel 		= UILabel()
 	private var yearLabel 		= UILabel()
 	private var descLabel 		= UILabel()
-	private var urlLabel 		= UILabel()
-	private var imageView 		= BookImageView()
+	private let imageView 		= BookImageView()
+	private let urlButton: UIButton = {
+		let button = UIButton()
+		button.layer.borderWidth = 1.0
+		button.layer.borderColor = UIColor.black.cgColor
+		button.setTitle("MORE INFO", for: .normal)
+		button.setTitleColor(.black, for: .normal)
+		return button
+	}()
 	private let stackView: UIStackView = {
 		let stackView = UIStackView(frame: .zero)
 		stackView.axis = .vertical
@@ -45,32 +52,7 @@ class DetailBookViewController: UIViewController {
 	
 	private func setup() {
 		self.fetchBooksDetail()
-	}
-	
-	private func configure() {
-		self.titleLabel.text = "title : " + String(describing: self.bookDetailList.title)
-		self.subtitleLabel.text = "subtitle : " + String(describing: self.bookDetailList.subtitle)
-		self.publisherLabel.text = "publisher : " + String(describing: self.bookDetailList.publisher)
-		self.authorsLabel.text = "authors : " + String(describing: self.bookDetailList.authors)
-		self.languageLabel.text = "language : " + String(describing: self.bookDetailList.language)
-		self.pagesLabel.text = "pages : " + String(describing: self.bookDetailList.pages)
-		self.isbn13Label.text = "isbn13 : " + String(describing: self.bookDetailList.isbn13)
-		self.isbn10Label.text = "isbn10 : " + String(describing: self.bookDetailList.isbn10)
-		self.priceLabel.text = "price : " + String(describing: self.bookDetailList.price)
-		self.yearLabel.text = "year : " + String(describing: self.bookDetailList.year)
-		self.descLabel.text = "desc : " + String(describing: self.bookDetailList.desc)
-		self.urlLabel.text = "url : " + String(describing: self.bookDetailList.url)
-		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
-	}
-	
-	private func fetchBooksDetail() {
-		let bookRequest = BookAPI(bookDetailString: self.isbn13 ?? "")
-		bookRequest.fetchBooksDetailList {[weak self] result in
-			self?.bookDetailList = result
-			DispatchQueue.main.async {
-				self?.configure()
-			}
-		}
+		self.urlButton.addTarget(self, action: #selector(self.didButtonClick), for: .touchUpInside)
 	}
 	
 	private func setLayout() {
@@ -96,7 +78,6 @@ class DetailBookViewController: UIViewController {
 		contentViewHeightConstraint.priority = .defaultLow
 		contentViewHeightConstraint.isActive = true
 		
-		
 		self.contentView.addSubview(self.imageView)
 		self.imageView.translatesAutoresizingMaskIntoConstraints = false
 		self.imageView.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
@@ -114,12 +95,55 @@ class DetailBookViewController: UIViewController {
 		self.stackView.addArrangedSubview(self.priceLabel)
 		self.stackView.addArrangedSubview(self.yearLabel)
 		self.stackView.addArrangedSubview(self.descLabel)
-		self.stackView.addArrangedSubview(self.urlLabel)
 		
 		self.stackView.translatesAutoresizingMaskIntoConstraints = false
 		self.stackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
 		self.stackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
 		self.stackView.topAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
-		self.stackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+		
+		self.contentView.addSubview(self.urlButton)
+		self.urlButton.translatesAutoresizingMaskIntoConstraints = false
+		self.urlButton.topAnchor.constraint(equalTo: self.stackView.bottomAnchor, constant: 10.0).isActive = true
+		self.urlButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+		self.urlButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+		self.urlButton.widthAnchor.constraint(equalToConstant: 150.0).isActive = true
+		self.urlButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+	}
+	
+	private func configure() {
+		self.titleLabel.text = "title : " + String(describing: self.bookDetailList.title)
+		self.subtitleLabel.text = "subtitle : " + String(describing: self.bookDetailList.subtitle)
+		self.publisherLabel.text = "publisher : " + String(describing: self.bookDetailList.publisher)
+		self.authorsLabel.text = "authors : " + String(describing: self.bookDetailList.authors)
+		self.languageLabel.text = "language : " + String(describing: self.bookDetailList.language)
+		self.pagesLabel.text = "pages : " + String(describing: self.bookDetailList.pages)
+		self.isbn13Label.text = "isbn13 : " + String(describing: self.bookDetailList.isbn13)
+		self.isbn10Label.text = "isbn10 : " + String(describing: self.bookDetailList.isbn10)
+		self.priceLabel.text = "price : " + String(describing: self.bookDetailList.price)
+		self.yearLabel.text = "year : " + String(describing: self.bookDetailList.year)
+		self.descLabel.text = "desc : " + String(describing: self.bookDetailList.desc)
+		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
+	}
+	
+	private func fetchBooksDetail() {
+		let bookRequest = BookAPI(bookDetailString: self.isbn13 ?? "")
+		bookRequest.fetchBooksDetailList {[weak self] result in
+			self?.bookDetailList = result
+			DispatchQueue.main.async {
+				self?.configure()
+			}
+		}
+	}
+	
+	@objc private func didButtonClick() {
+		guard let url = self.bookDetailList.url else { return }
+		
+		if let url = URL(string: url) {
+			if #available(iOS 10, *) {
+				UIApplication.shared.open(url)
+			} else {
+				UIApplication.shared.openURL(url)
+			}
+		}
 	}
 }
