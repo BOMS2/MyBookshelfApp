@@ -8,51 +8,51 @@
 import Foundation
 import UIKit
 
-enum BookInfoError:Error {
-	case noDataAvailable
-	case canNotProcessData
+
+enum BookError: Error {
+	case norequest
+	case nodata
 }
 
 struct BookAPI {
 	var resourceURL : URL? = nil
 
 	init(searchString: String) {
-		let bookSearchString : String = "https://api.itbook.store/1.0/search/\(searchString)"
-		self.resourceURL = convertUrl(bookSearchString)
+		self.resourceURL = URL(string: "https://api.itbook.store/1.0/search/\(searchString)")
 	}
 	
 	init(bookDetailString: String) {
-		let bookDetailString : String = "https://api.itbook.store/1.0/books/\(bookDetailString)"
-		self.resourceURL = convertUrl(bookDetailString)
+		self.resourceURL = URL(string: "https://api.itbook.store/1.0/books/\(bookDetailString)")
 	}
 	
-	func fetchBooksList(completion: @escaping(Result<([Book]), BookInfoError>) -> Void) {
-		let dataTask = URLSession.shared.dataTask(with: self.resourceURL!) { data, _, _ in
-			guard let jsonData = data else {
-				completion(.failure(.noDataAvailable))
-				return
-			}
+	func fetchBooksList(completion : @escaping (_ result: [Book]) -> Void) {
+		let task = URLSession.shared.dataTask(with: self.resourceURL!) { (data, response, error) in
 			do {
-				let decoder = JSONDecoder()
-				let bookInfoResponse = try decoder.decode(BookInfoResponse.self, from: jsonData)
-				let bookDetails = bookInfoResponse.books
-				completion(.success((bookDetails)))
+				guard let data = data, let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode, error == nil else {
+					throw error ?? BookError.nodata
+				}
+				let bookInfoResponse = try JSONDecoder().decode(BookInfo.self, from: data)
+				let bookDetail = bookInfoResponse.books
+				completion(bookDetail)
 			} catch {
-				completion(.failure(.canNotProcessData))
+				print("Error (\(BookError.norequest)) : \(error)")
 			}
 		}
-		dataTask.resume()
+		task.resume()
 	}
-}
 
-
-extension BookAPI {
-	func convertUrl(_ resourceString : String) -> URL {
-		guard let stringurlfixed = resourceString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let resourceURL = URL(string: stringurlfixed)
-		else {
-			print(resourceString)
-			fatalError()
+	func fetchBooksDetailList(completion : @escaping (_ result: BookDetail) -> Void) {
+		let task = URLSession.shared.dataTask(with: self.resourceURL!) { (data, response, error) in
+			do {
+				guard let data = data, let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode, error == nil else {
+					throw error ?? BookError.nodata
+				}
+				let bookDetail = try JSONDecoder().decode(BookDetail.self, from: data)
+				completion(bookDetail)
+			} catch {
+				print("Error (\(BookError.norequest)) : \(error)")
+			}
 		}
-		return resourceURL
+		task.resume()
 	}
 }

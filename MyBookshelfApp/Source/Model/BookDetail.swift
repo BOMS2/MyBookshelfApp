@@ -5,7 +5,7 @@
 //  Created by 김보민 on 2021/03/09.
 //
 
-struct BookDetail: Decodable {
+struct BookDetail: Codable {
 	var image : String?
 	var title : String?
 	var subtitle : String?
