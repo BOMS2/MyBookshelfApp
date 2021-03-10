@@ -45,8 +45,6 @@ class DetailBookViewController: UIViewController {
 	}
 	
 	private func configure() {
-		guard let url = URL(string: self.bookDetailList.image ?? "") else { return }
-		
 		self.titleLabel.text = "title : " + String(describing: self.bookDetailList.title)
 		self.subtitleLabel.text = "subtitle : " + String(describing: self.bookDetailList.subtitle)
 		self.publisherLabel.text = "publisher : " + String(describing: self.bookDetailList.publisher)
@@ -59,7 +57,8 @@ class DetailBookViewController: UIViewController {
 		self.yearLabel.text = "year : " + String(describing: self.bookDetailList.year)
 		self.descLabel.text = "desc : " + String(describing: self.bookDetailList.desc)
 		self.urlLabel.text = "url : " + String(describing: self.bookDetailList.url)
-		self.imageView.loadImage(from: url)
+//		self.imageView.loadImage(from: url)
+		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
 	}
 	
 	private func fetchBooksDetail() {

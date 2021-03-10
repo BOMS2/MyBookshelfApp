@@ -75,11 +75,9 @@ extension BookListCell {
 	}
 	
 	public func loadBookInfo(bookInfo : Book) {
-		guard let url = URL(string: bookInfo.image) else { return }
-		
 		self.titleLabel.text = bookInfo.title
 		self.subtitleLabel.text = bookInfo.subtitle
 		self.priceLabel.text = bookInfo.price
-		self.bookImageView.loadImage(from: url)
+		self.bookImageView.setImageUrl(bookInfo.image)
 	}
 }

@@ -26,33 +26,37 @@ struct BookAPI {
 	}
 	
 	func fetchBooksList(completion : @escaping (_ result: [Book]) -> Void) {
-		let task = URLSession.shared.dataTask(with: self.resourceURL!) { (data, response, error) in
-			do {
-				guard let data = data, let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode, error == nil else {
-					throw error ?? BookError.nodata
+		if let url = self.resourceURL {
+			let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+				do {
+					guard let data = data, let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode, error == nil else {
+						throw error ?? BookError.nodata
+					}
+					let bookInfoResponse = try JSONDecoder().decode(BookInfo.self, from: data)
+					let bookDetail = bookInfoResponse.books
+					completion(bookDetail)
+				} catch {
+					print("Error (\(BookError.norequest)) : \(error)")
 				}
-				let bookInfoResponse = try JSONDecoder().decode(BookInfo.self, from: data)
-				let bookDetail = bookInfoResponse.books
-				completion(bookDetail)
-			} catch {
-				print("Error (\(BookError.norequest)) : \(error)")
 			}
+			task.resume()
 		}
-		task.resume()
 	}
 
 	func fetchBooksDetailList(completion : @escaping (_ result: BookDetail) -> Void) {
-		let task = URLSession.shared.dataTask(with: self.resourceURL!) { (data, response, error) in
-			do {
-				guard let data = data, let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode, error == nil else {
-					throw error ?? BookError.nodata
+		if let url = self.resourceURL {
+			let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+				do {
+					guard let data = data, let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode, error == nil else {
+						throw error ?? BookError.nodata
+					}
+					let bookDetail = try JSONDecoder().decode(BookDetail.self, from: data)
+					completion(bookDetail)
+				} catch {
+					print("Error (\(BookError.norequest)) : \(error)")
 				}
-				let bookDetail = try JSONDecoder().decode(BookDetail.self, from: data)
-				completion(bookDetail)
-			} catch {
-				print("Error (\(BookError.norequest)) : \(error)")
 			}
+			task.resume()
 		}
-		task.resume()
 	}
 }
