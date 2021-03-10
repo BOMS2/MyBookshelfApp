@@ -47,11 +47,8 @@ extension BookListCell {
 		self.contentView.backgroundColor = .white
 		self.titleLabel.numberOfLines = 0
 		self.subtitleLabel.numberOfLines = 0
-		self.stackView.setContentHuggingPriority(UILayoutPriority.defaultLow, for:.horizontal)
-//		self.priceLabel.setContentHuggingPriority(UILayoutPriority.defaultHigh, for:.horizontal)
-//		self.stackView.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
-		self.priceLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
-		
+		self.stackView.setContentHuggingPriority(.required, for:.horizontal)
+		self.priceLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 	}
 	
 	private func layout() {
@@ -74,7 +71,7 @@ extension BookListCell {
 		self.priceLabel.translatesAutoresizingMaskIntoConstraints = false
 		self.priceLabel.centerYAnchor.constraint(equalTo: self.stackView.centerYAnchor).isActive = true
 		self.priceLabel.leadingAnchor.constraint(equalTo: self.stackView.trailingAnchor, constant: 5.0).isActive = true
-		self.priceLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 10.0).isActive = true
+		self.priceLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5.0).isActive = true
 	}
 	
 	public func loadBookInfo(bookInfo : Book) {
