@@ -47,7 +47,6 @@ extension MemoListCell {
 		self.memo.bottomAnchor.constraint(equalTo: self.line.topAnchor, constant: -10).isActive = true
 		self.memo.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
 		self.memo.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
-		
 		self.contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
 		
 		self.line.translatesAutoresizingMaskIntoConstraints = false

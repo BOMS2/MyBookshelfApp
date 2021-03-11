@@ -9,25 +9,23 @@ import UIKit
 
 class MemoViewController: UIViewController {
 	
-	private let symbolLabel: UILabel = {
-		let label = UILabel()
-		label.textColor = UIColor(red: 252/255, green: 60/255, blue: 68/255, alpha: 1)
-		label.text = "\""
-		label.font = label.font.withSize(100)
-		return label
+	private let symbol: UIImageView = {
+		var image = UIImageView()
+		image.image = UIImage(named: "quote")
+		return image
 	}()
 	private let memo: UITextField = {
 		let text = UITextField()
 		text.borderStyle = .roundedRect
 		text.layer.borderColor = UIColor.yellow.cgColor
-		text.placeholder = "Write a message about this book"
+		text.placeholder = " Write a message about this book"
 		text.backgroundColor = .white
 		text.textColor = .black
 		return text
 	}()
 	private let saveButton: UIButton = {
 		let button = UIButton()
-		button.setTitle("✔️", for: .normal)
+		button.setTitle("save", for: .normal)
 		button.setTitleColor(.black, for: .normal)
 		return button
 	}()
@@ -61,22 +59,23 @@ extension MemoViewController {
 		self.tableView.dataSource = self
 		self.tableView.register(MemoListCell.self, forCellReuseIdentifier: "MemoListCell")
 		self.tableView.separatorStyle = .none
-		
 		self.saveButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 	}
 	
 	private func setLayout() {
-		self.view.addSubview(self.symbolLabel)
+		self.view.addSubview(self.symbol)
 		self.view.addSubview(self.memo)
 		self.view.addSubview(self.saveButton)
 		self.view.addSubview(self.tableView)
-		self.symbolLabel.translatesAutoresizingMaskIntoConstraints = false
-		self.symbolLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
-		self.symbolLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 30).isActive = true
+		self.symbol.translatesAutoresizingMaskIntoConstraints = false
+		self.symbol.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
+		self.symbol.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 30).isActive = true
+		self.symbol.widthAnchor.constraint(equalToConstant: 50).isActive = true
+		self.symbol.heightAnchor.constraint(equalToConstant: 50).isActive = true
 		
 		self.memo.translatesAutoresizingMaskIntoConstraints = false
 		self.memo.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30).isActive = true
-		self.memo.topAnchor.constraint(equalTo: self.symbolLabel.bottomAnchor).isActive = true
+		self.memo.topAnchor.constraint(equalTo: self.symbol.bottomAnchor, constant: 10).isActive = true
 		self.memo.heightAnchor.constraint(equalToConstant: 80).isActive = true
 		
 		self.saveButton.translatesAutoresizingMaskIntoConstraints = false

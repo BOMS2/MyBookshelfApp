@@ -35,7 +35,7 @@ extension SearchViewController {
 		self.tableView.dataSource = self
 		self.tableView.register(BookListCell.self, forCellReuseIdentifier: "BookListCell")
 		self.searchBar.delegate = self
-		self.searchBar.placeholder = "more than 2 letters"
+		self.searchBar.placeholder = " more than 2 letters"
 		
 		self.requestText(searchText: self.searchText)
 	}
