@@ -114,7 +114,11 @@ class DetailBookViewController: UIViewController {
 	}
 	
 	@objc private func memoButtonClick() {
-		self.navigationController?.pushViewController(MemoViewController(), animated: false)
+		guard let isbn13 = self.bookDetailList.isbn13 else { return }
+		
+		let vc = MemoViewController()
+		vc.isbn13 = isbn13
+		self.navigationController?.present(vc, animated: true, completion: nil)
 	}
 }
 

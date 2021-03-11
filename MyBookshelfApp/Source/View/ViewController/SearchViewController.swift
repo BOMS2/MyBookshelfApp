@@ -109,4 +109,8 @@ extension SearchViewController: UISearchBarDelegate {
 		}
 		self.tableView.reloadData()
 	}
+	
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		self.tableView.reloadData()
+	}
 }
