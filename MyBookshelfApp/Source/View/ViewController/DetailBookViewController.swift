@@ -20,12 +20,14 @@ class DetailBookViewController: UIViewController {
 		label.textColor = UIColor(red: 252/255, green: 60/255, blue: 68/255, alpha: 1)
 		label.textAlignment = .center
 		label.font = label.font.withSize(20)
+		label.numberOfLines = 0
 		return label
 	}()
 	private var subtitleLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .lightGray
 		label.font = label.font.withSize(15)
+		label.numberOfLines = 0
 		return label
 	}()
 	private var publisherLabel 	= UILabel()
@@ -42,13 +44,13 @@ class DetailBookViewController: UIViewController {
 		let button = UIButton()
 		button.layer.borderWidth = 1
 		button.layer.borderColor = UIColor.black.cgColor
-		button.setTitle("MORE INFO", for: .normal)
+		button.setTitle("MORE INFO ", for: .normal)
 		button.setTitleColor(.black, for: .normal)
 		return button
 	}()
 	private let memoButton: UIButton = {
 		let button = UIButton()
-		button.setTitle("memo", for: .normal)
+		button.setTitle("📝", for: .normal)
 		button.setTitleColor(.black, for: .normal)
 		return button
 	}()
@@ -73,53 +75,6 @@ class DetailBookViewController: UIViewController {
 		self.setup()
 		self.setLayout()
 	}
-	
-	private func configure() {
-		guard let title = self.bookDetailList.title else { return }
-		
-		self.titleLabel.text = title
-		self.subtitleLabel.text = self.bookDetailList.subtitle ?? ""
-		self.publisherLabel.text = "publisher : " + (self.bookDetailList.publisher ?? "")
-		self.authorsLabel.text = "authors : " + (self.bookDetailList.authors ?? "")
-		self.languageLabel.text = "language : " + (self.bookDetailList.language ?? "")
-		self.pagesLabel.text = "pages : " + (self.bookDetailList.pages ?? "")
-		self.isbn13Label.text = "isbn13 : " + (self.bookDetailList.isbn13 ?? "")
-		self.isbn10Label.text = "isbn10 : " + (self.bookDetailList.isbn10 ?? "")
-		self.priceLabel.text = "price : " + (self.bookDetailList.price ?? "")
-		self.yearLabel.text = "year : " + (self.bookDetailList.year ?? "")
-		self.descLabel.text = "desc : " + (self.bookDetailList.desc ?? "")
-		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
-	}
-	
-	private func fetchBooksDetail() {
-		let bookRequest = BookAPI(bookDetailString: self.isbn13 ?? "")
-		bookRequest.fetchBooksDetailList {[weak self] result in
-			self?.bookDetailList = result
-			DispatchQueue.main.async {
-				self?.configure()
-			}
-		}
-	}
-	
-	@objc private func urlButtonClick() {
-		guard let url = self.bookDetailList.url else { return }
-		
-		if let url = URL(string: url) {
-			if #available(iOS 10, *) {
-				UIApplication.shared.open(url)
-			} else {
-				UIApplication.shared.openURL(url)
-			}
-		}
-	}
-	
-	@objc private func memoButtonClick() {
-		guard let isbn13 = self.bookDetailList.isbn13 else { return }
-		
-		let vc = MemoViewController()
-		vc.isbn13 = isbn13
-		self.navigationController?.present(vc, animated: true, completion: nil)
-	}
 }
 
 extension DetailBookViewController {
@@ -127,8 +82,6 @@ extension DetailBookViewController {
 		self.fetchBooksDetail()
 		self.urlButton.addTarget(self, action: #selector(self.urlButtonClick), for: .touchUpInside)
 		self.memoButton.addTarget(self, action: #selector(self.memoButtonClick), for: .touchUpInside)
-		self.titleLabel.numberOfLines = 0
-		self.subtitleLabel.numberOfLines = 0
 		self.descLabel.numberOfLines = 0
 	}
 	
@@ -188,15 +141,64 @@ extension DetailBookViewController {
 		self.stackView2.topAnchor.constraint(equalTo: self.stackView1.bottomAnchor, constant: 10).isActive = true
 		
 		self.urlButton.translatesAutoresizingMaskIntoConstraints = false
-		self.urlButton.topAnchor.constraint(equalTo: self.stackView2.bottomAnchor, constant: 10).isActive = true
+		self.urlButton.topAnchor.constraint(equalTo: self.stackView2.bottomAnchor, constant: 30).isActive = true
 		self.urlButton.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
 		self.urlButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
 		self.urlButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
 		self.urlButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 		
 		self.memoButton.translatesAutoresizingMaskIntoConstraints = false
-		self.memoButton.topAnchor.constraint(equalTo: self.stackView2.bottomAnchor, constant: 10).isActive = true
-		self.memoButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
+		self.memoButton.centerYAnchor.constraint(equalTo: self.urlButton.centerYAnchor).isActive = true
+		self.memoButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
 		self.memoButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+		self.memoButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+		self.memoButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+	}
+	
+	private func configure() {
+		guard let title = self.bookDetailList.title else { return }
+		
+		self.titleLabel.text = title
+		self.subtitleLabel.text = self.bookDetailList.subtitle ?? ""
+		self.publisherLabel.text = "publisher : " + (self.bookDetailList.publisher ?? "")
+		self.authorsLabel.text = "authors : " + (self.bookDetailList.authors ?? "")
+		self.languageLabel.text = "language : " + (self.bookDetailList.language ?? "")
+		self.pagesLabel.text = "pages : " + (self.bookDetailList.pages ?? "")
+		self.isbn13Label.text = "isbn13 : " + (self.bookDetailList.isbn13 ?? "")
+		self.isbn10Label.text = "isbn10 : " + (self.bookDetailList.isbn10 ?? "")
+		self.priceLabel.text = "price : " + (self.bookDetailList.price ?? "")
+		self.yearLabel.text = "year : " + (self.bookDetailList.year ?? "")
+		self.descLabel.text = "desc : " + (self.bookDetailList.desc ?? "")
+		self.imageView.setImageUrl(self.bookDetailList.image ?? "")
+	}
+	
+	private func fetchBooksDetail() {
+		let bookRequest = BookAPI(bookDetailString: self.isbn13 ?? "")
+		bookRequest.fetchBooksDetailList {[weak self] result in
+			self?.bookDetailList = result
+			DispatchQueue.main.async {
+				self?.configure()
+			}
+		}
+	}
+	
+	@objc private func urlButtonClick() {
+		guard let url = self.bookDetailList.url else { return }
+		
+		if let url = URL(string: url) {
+			if #available(iOS 10, *) {
+				UIApplication.shared.open(url)
+			} else {
+				UIApplication.shared.openURL(url)
+			}
+		}
+	}
+	
+	@objc private func memoButtonClick() {
+		guard let isbn13 = self.bookDetailList.isbn13 else { return }
+		
+		let vc = MemoViewController()
+		vc.isbn13 = isbn13
+		self.navigationController?.present(vc, animated: true, completion: nil)
 	}
 }

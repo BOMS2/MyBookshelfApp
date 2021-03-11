@@ -27,12 +27,15 @@ class SearchViewController: UIViewController {
 		self.setup()
 		self.setLayout()
 	}
-	
+}
+
+extension SearchViewController {
 	private func setup() {
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
 		self.tableView.register(BookListCell.self, forCellReuseIdentifier: "BookListCell")
 		self.searchBar.delegate = self
+		self.searchBar.placeholder = "more than 2 letters"
 		
 		self.requestText(searchText: self.searchText)
 	}

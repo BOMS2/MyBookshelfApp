@@ -27,7 +27,7 @@ class MemoViewController: UIViewController {
 	}()
 	private let saveButton: UIButton = {
 		let button = UIButton()
-		button.setTitle("save", for: .normal)
+		button.setTitle("✔️", for: .normal)
 		button.setTitleColor(.black, for: .normal)
 		return button
 	}()
@@ -57,9 +57,12 @@ extension MemoViewController {
 	private func setup() {
 		self.view.backgroundColor = .white
 		self.saveButton.addTarget(self, action:#selector(self.saveMemo), for: .touchUpInside)
-//		self.tableView.delegate = self
+		self.tableView.delegate = self
 		self.tableView.dataSource = self
 		self.tableView.register(MemoListCell.self, forCellReuseIdentifier: "MemoListCell")
+		self.tableView.separatorStyle = .none
+		
+		self.saveButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 	}
 	
 	private func setLayout() {
@@ -68,18 +71,18 @@ extension MemoViewController {
 		self.view.addSubview(self.saveButton)
 		self.view.addSubview(self.tableView)
 		self.symbolLabel.translatesAutoresizingMaskIntoConstraints = false
-		self.symbolLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-		self.symbolLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10).isActive = true
+		self.symbolLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
+		self.symbolLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 30).isActive = true
 		
 		self.memo.translatesAutoresizingMaskIntoConstraints = false
-		self.memo.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
-		self.memo.topAnchor.constraint(equalTo: self.symbolLabel.bottomAnchor, constant: 20).isActive = true
-		self.memo.heightAnchor.constraint(equalToConstant: 50).isActive = true
+		self.memo.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30).isActive = true
+		self.memo.topAnchor.constraint(equalTo: self.symbolLabel.bottomAnchor).isActive = true
+		self.memo.heightAnchor.constraint(equalToConstant: 80).isActive = true
 		
 		self.saveButton.translatesAutoresizingMaskIntoConstraints = false
 		self.saveButton.centerYAnchor.constraint(equalTo: self.memo.centerYAnchor).isActive = true
 		self.saveButton.leadingAnchor.constraint(equalTo: self.memo.trailingAnchor, constant: 10).isActive = true
-		self.saveButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10).isActive = true
+		self.saveButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
 		self.saveButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
 		
 		self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -94,8 +97,9 @@ extension MemoViewController {
 		
 		self.memoList = list
 	}
+	
 	@objc func saveMemo() {
-		guard let memo = self.memo.text else { return }
+		guard let memo = self.memo.text, !memo.isEmpty else { return }
 		
 		self.memoList.append(memo)
 		UserDefaults.standard.set(self.memoList, forKey: "\(self.isbn13)")
@@ -114,5 +118,15 @@ extension MemoViewController: UITableViewDataSource {
 		cell.loadMemo(memo: memoInfo)
 		
 		return cell
+	}
+}
+
+extension MemoViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return UITableView.automaticDimension
+	}
+	
+	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 100
 	}
 }
